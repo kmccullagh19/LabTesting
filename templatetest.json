@@ -278,7 +278,7 @@
             "dependsOn": [
               "new-nsg"
             ],
-            "name": "[concat(variables('virtualNetworkName'), '/', parameters('subnetName'))]",
+            "name": "[concat(variables('virtualNetworkName'), '/', variables('subnetName'))]",
             "location": "[resourceGroup().location]",
             "properties": {
               "addressPrefix": "[parameters('subnetAddressPrefix')]",
