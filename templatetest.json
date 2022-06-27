@@ -44,6 +44,10 @@
                 "description": "When true this limits the scale set to a single placement group, of max size 100 virtual machines. NOTE: If singlePlacementGroup is true, it may be modified to false. However, if singlePlacementGroup is false, it may not be modified to true."
             }
         },
+        "frontEndNSGName": {
+            "type": "string",
+            "defaultValue": "NSGNameTest"
+        },
         "adminUsername": {
             "type": "string",
             "defaultValue": "vmssadmin",
@@ -229,8 +233,6 @@
                                 "name": "[variables('nicName')]",
                                 "properties": {
                                     "primary": true,
-                                        "networkSecurityGroup": {
-                                        "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"},
                                     "ipConfigurations": [
                                         {
                                             "name": "[variables('ipConfigName')]",
@@ -290,7 +292,46 @@
                     }
                 ]
             }
-        }
+        },
+        {"apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[parameters('frontEndNSGName')]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+              "displayName": "NSG - Front End"
+            },
+            "properties": {
+              "securityRules": [
+                {
+                  "name": "rdp-rule",
+                  "properties": {
+                    "description": "Allow RDP",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "3389",
+                    "sourceAddressPrefix": "Internet",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                  }
+                },
+                {
+                  "name": "web-rule",
+                  "properties": {
+                    "description": "Allow WEB",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "80",
+                    "sourceAddressPrefix": "Internet",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 101,
+                    "direction": "Inbound"
+                  }
+                }
+              ]
+            }}
     ],
     "outputs": {
         "applicationUrl": {
