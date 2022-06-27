@@ -21,7 +21,7 @@
         },
         "vmssName": {
             "type": "string",
-            "defaultValue": "Repro1",
+            "defaultValue": "kmcc627",
             "minLength": 3,
             "maxLength": 61,
             "metadata": {
@@ -287,7 +287,10 @@
                     {
                         "name": "[variables('subnetName')]",
                         "properties": {
-                            "addressPrefix": "[variables('subnetPrefix')]"
+                            "addressPrefix": "[variables('subnetPrefix')]",
+                            "networkSecurityGroup": {
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('frontEndNSGName'))]"
+                              }
                         }
                     }
                 ]
