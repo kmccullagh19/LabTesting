@@ -89,7 +89,6 @@
     },
     "variables": {
         "namingInfix": "[toLower(substring(concat(parameters('vmssName'), uniqueString(resourceGroup().id)), 0, 9))]",
-        "nsgName": "[concat(variables('namingInfix'), 'nsg')]",
         "longNamingInfix": "[toLower(parameters('vmssName'))]",
         "addressPrefix": "10.0.0.0/16",
         "subnetPrefix": "10.0.0.0/24",
@@ -251,7 +250,7 @@
                                     ]
                                 },
                                 "networkSecurityGroup": {
-                                    "id": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
+                                    "id": "NSGTest"
                                 }
                             }
                         ]
