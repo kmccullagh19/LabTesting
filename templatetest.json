@@ -21,7 +21,7 @@
         },
         "vmssName": {
             "type": "string",
-            "defaultValue": "SpecialistVMSSTraining",
+            "defaultValue": "SpecialistVMSSTrainingTest",
             "minLength": 3,
             "maxLength": 61,
             "metadata": {
