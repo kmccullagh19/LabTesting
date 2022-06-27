@@ -273,45 +273,20 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[parameters('frontEndNSGName')]",
+            "apiVersion": "2018-03-01",
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "dependsOn": [
+              "new-nsg"
+            ],
+            "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
             "location": "[resourceGroup().location]",
-            "tags": {
-              "displayName": "NSG - Front End"
-            },
             "properties": {
-              "securityRules": [
-                {
-                  "name": "rdp-rule",
-                  "properties": {
-                    "description": "Allow RDP",
-                    "protocol": "Tcp",
-                    "sourcePortRange": "*",
-                    "destinationPortRange": "3389",
-                    "sourceAddressPrefix": "Internet",
-                    "destinationAddressPrefix": "*",
-                    "access": "Allow",
-                    "priority": 100,
-                    "direction": "Inbound"
-                  }
-                },
-                {
-                  "name": "web-rule",
-                  "properties": {
-                    "description": "Allow WEB",
-                    "protocol": "Tcp",
-                    "sourcePortRange": "*",
-                    "destinationPortRange": "80",
-                    "sourceAddressPrefix": "Internet",
-                    "destinationAddressPrefix": "*",
-                    "access": "Allow",
-                    "priority": 101,
-                    "direction": "Inbound"
-                  }
-                }
-              ]
-            }},
+              "addressPrefix": "[parameters('subnetAddressPrefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+              }
+            }
+          },
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-06-01",
