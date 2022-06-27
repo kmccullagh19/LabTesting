@@ -21,7 +21,7 @@
         },
         "vmssName": {
             "type": "string",
-            "defaultValue": "627Test1",
+            "defaultValue": "Repro1",
             "minLength": 3,
             "maxLength": 61,
             "metadata": {
