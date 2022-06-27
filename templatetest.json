@@ -21,7 +21,7 @@
         },
         "vmssName": {
             "type": "string",
-            "defaultValue": "kmcc627",
+            "defaultValue": "kmcc77777",
             "minLength": 3,
             "maxLength": 61,
             "metadata": {
