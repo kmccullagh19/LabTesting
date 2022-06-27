@@ -21,7 +21,7 @@
         },
         "vmssName": {
             "type": "string",
-            "defaultValue": "L100Training1",
+            "defaultValue": "627Test1",
             "minLength": 3,
             "maxLength": 61,
             "metadata": {
