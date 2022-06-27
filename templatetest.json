@@ -205,7 +205,7 @@
             "properties": {
                 "overprovision": true,
                 "upgradePolicy": {
-                    "mode": "Automatic"
+                    "mode": "Manual"
                 },
                 "singlePlacementGroup": "[parameters('singlePlacementGroup')]",
                 "platformFaultDomainCount": "[parameters('platformFaultDomainCount')]",
