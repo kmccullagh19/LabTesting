@@ -1,3 +1,5 @@
+///latest with mike: 
+
 {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
@@ -5,6 +7,13 @@
         "vmSku": {
             "type": "string",
             "defaultValue": "Standard_D2s_v3",
+            "metadata": {
+                "description": "Size of VMs in the VM Scale Set."
+            }
+        },
+            "SubnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/24",
             "metadata": {
                 "description": "Size of VMs in the VM Scale Set."
             }
@@ -60,20 +69,6 @@
             "type": "securestring",
             "metadata": {
                 "description": "Admin password on all VMs."
-            }
-        },
-        "_artifactsLocation": {
-            "type": "string",
-            "defaultValue": "[deployment().properties.templatelink.uri]",
-            "metadata": {
-                "description": "The base URI where artifacts required by this template are located. For example, if stored on a public GitHub repo, you'd use the following URI: https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vmss-windows-webapp-dsc-autoscale/."
-            }
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "defaultValue": "",
-            "metadata": {
-                "description": "The sasToken required to access _artifactsLocation.  If your artifacts are stored on a public repo or public storage account you can leave this blank."
             }
         },
         "location": {
@@ -272,18 +267,57 @@
                 }
             }
         },
+        {"apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "name": "[variables('nsgName')]",
+        "location": "[resourceGroup().location]",
+        "tags": {
+          "displayName": "NSG - Front End"
+        },
+        "properties": {
+          "securityRules": [
+            {
+              "name": "rdp-rule",
+              "properties": {
+                "description": "Allow RDP",
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "3389",
+                "sourceAddressPrefix": "Internet",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 100,
+                "direction": "Inbound"
+              }
+            },
+            {
+              "name": "web-rule",
+              "properties": {
+                "description": "Allow WEB",
+                "protocol": "Tcp",
+                "sourcePortRange": "*",
+                "destinationPortRange": "80",
+                "sourceAddressPrefix": "Internet",
+                "destinationAddressPrefix": "*",
+                "access": "Allow",
+                "priority": 101,
+                "direction": "Inbound"
+              }
+            }
+          ]
+        }},
         {
             "apiVersion": "2018-03-01",
             "type": "Microsoft.Network/virtualNetworks/subnets",
             "dependsOn": [
-              "new-nsg"
+         		"[variables('nsgName')]"
             ],
             "name": "[concat(variables('virtualNetworkName'), '/', variables('subnetName'))]",
             "location": "[resourceGroup().location]",
             "properties": {
               "addressPrefix": "[parameters('subnetAddressPrefix')]",
               "networkSecurityGroup": {
-                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'new-nsg')]"
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
               }
             }
           },
